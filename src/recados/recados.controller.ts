@@ -3,11 +3,7 @@ import { RecadosService } from './recados.service';
 import { CreateRecadoDto } from './dto/create-recado.dto';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
 
-@Controller('recados')
-export class RecadosController {
-    constructor(private recadosService: RecadosService) {}
-
-    // CRUD
+// CRUD
     // Create -> POST -> Criar um recado
     // Read -> GET -> Ler todos os recados
     // Read -> GET -> Ler apenas um recado
@@ -20,12 +16,19 @@ export class RecadosController {
     // DTO - Data Transfer Object -> Objeto de transferência de dados
     // DTO -> Objeto simples -> Validar dados / Transformar dados 
 
+@Controller('recados')
+export class RecadosController {
+    constructor(private recadosService: RecadosService) {}
+
+    
+
     @HttpCode(HttpStatus.OK)
     @Get()
-    findAll(@Query() pagination: any) {
+    async findAll(@Query() pagination: any) {
         const { limit = 10, offset = 0 } = pagination;
         // return `Essa rota retorna todos os recados. Limit: ${limit} e Offset: ${offset}`;
-        return this.recadosService.findAll();
+        const recados = await this.recadosService.findAll();
+        return recados;
     }
 
     @Get(':id')
