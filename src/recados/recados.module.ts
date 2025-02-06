@@ -5,8 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Recado } from './entities/recado.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Recado])], 
+  imports: [TypeOrmModule.forFeature([Recado])],
   controllers: [RecadosController],
-  providers: [RecadosService]
+  providers: [RecadosService],
 })
 export class RecadosModule {}
