@@ -1,7 +1,10 @@
+import { Pessoa } from 'src/pessoas/entities/pessoa.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -14,11 +17,7 @@ export class Recado {
   @Column({ type: 'varchar', length: 100 })
   texto: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  de: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  para: string;
+  
 
   @Column({ default: false })
   lido: boolean;
@@ -31,4 +30,17 @@ export class Recado {
 
   @UpdateDateColumn()
   updateAt?: Date;
+
+  // Muitos recados podem ser enviados por uma pessoa(emissor)
+  @ManyToOne(() => Pessoa)
+  // Especifica a coluna que armazena a chave estrangeira
+  @JoinColumn({ name: 'de' })
+  de: String;
+
+  // Muitos recados podem ser enviados por uma pessoa(destinataria)
+  @ManyToOne(() => Pessoa)
+  // Especifica a coluna que armazena a chave estrangeira
+  @JoinColumn({ name: 'para' })
+  para: String;
+
 }

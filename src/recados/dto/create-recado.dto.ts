@@ -13,15 +13,15 @@ export class CreateRecadoDto {
   @MaxLength(100)
   readonly texto: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(5)
-  @MaxLength(100)
-  readonly de: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // @MinLength(5)
+  // @MaxLength(100)
+  // readonly de: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(5)
-  @MaxLength(100)
-  readonly para: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // @MinLength(5)
+  // @MaxLength(100)
+  // readonly para: string;
 }
