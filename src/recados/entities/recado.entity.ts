@@ -30,13 +30,13 @@ export class Recado {
   updateAt?: Date;
 
   // Muitos recados podem ser enviados por uma pessoa(emissor)
-  @ManyToOne(() => Pessoa)
+  @ManyToOne(() => Pessoa, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
   // Especifica a coluna que armazena a chave estrangeira
   @JoinColumn({ name: 'de' })
   de: Pessoa;
 
   // Muitos recados podem ser enviados por uma pessoa(destinataria)
-  @ManyToOne(() => Pessoa)
+  @ManyToOne(() => Pessoa, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
   // Especifica a coluna que armazena a chave estrangeira
   @JoinColumn({ name: 'para' })
   para: Pessoa;

@@ -15,22 +15,21 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-    "texto": "Este texto deve chegar no e-mail. \nAqui vem na próxima linha.",
-    "deId": 6,
-    "paraId": 5
+    "texto": "mikael para luiz",
+    "deId": 5,
+    "paraId": 6
 }
 ### Atualiza um recado
-PATCH {{baseUrl}}/recados/6/
+PATCH {{baseUrl}}/recados/23/
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
     "texto": "Este texto deve chegar no e-mail 7.",
-    "deId": 6,
-    "paraId": 6
+    "lido": true
 }
 ### Apaga um recado
-DELETE {{baseUrl}}/recados/70/
+DELETE {{baseUrl}}/recados/20/
 Authorization: Bearer {{authToken}}
 
 

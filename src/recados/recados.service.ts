@@ -1,6 +1,4 @@
 import {
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -11,7 +9,7 @@ import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PessoasService } from 'src/pessoas/pessoas.service';
-import { text } from 'stream/consumers';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class RecadosService {
@@ -33,8 +31,12 @@ export class RecadosService {
   //   },
   // ];
 
-  async findAll() {
+  async findAll(paginationDto: PaginationDto = { limit: 10, offset: 0 }) {
+    const { limit = 10, offset = 0 } = paginationDto;
+
     const recados = await this.recadoRepository.find({
+      take: limit, // quantos registros serão retornados
+      skip: offset, // quantos registros serão pulados
       relations: ['de', 'para'],
       order: {
         id: 'DESC',
@@ -107,18 +109,11 @@ export class RecadosService {
   }
 
   async update(id: number, UpdateRecadoDto: UpdateRecadoDto) {
-    const partialUpadateRecadoDto = {
-      lido: UpdateRecadoDto?.lido,
-      texto: UpdateRecadoDto?.texto,
-    };
+    
+    const recado = await this.findOne(id);
 
-    const recado = await this.recadoRepository.preload({
-      id,
-      ...partialUpadateRecadoDto,
-    });
-
-    if (!recado) return new NotFoundException('Recado não encontrado');
-
+    recado.texto = UpdateRecadoDto?.texto ?? recado.texto;
+    recado.lido = UpdateRecadoDto?.lido ?? recado.lido;
     return this.recadoRepository.save(recado);
   }
 
