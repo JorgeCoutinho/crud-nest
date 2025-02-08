@@ -1,5 +1,6 @@
 @baseUrl = http://127.0.0.1:4000
-
+@authToken = {{authenticate.response.body.accessToken}}
+@refreshToken = {{authenticate.response.body.refreshToken}}
 
 # RECADOS
 ### Lista todos os recados
@@ -7,25 +8,108 @@ GET {{baseUrl}}/recados/
 ?limit=10
 &offset=0
 ### Lista apenas um recado
-GET {{baseUrl}}/recados/2/
+GET {{baseUrl}}/recados/1/
 ### Cria um recado
 POST {{baseUrl}}/recados/
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-    "texto": "Este texto deve chegar no e-mail 5. ",
-    "de": "joanca",
-    "para": "luizx"
+    "texto": "Este texto deve chegar no e-mail. \nAqui vem na próxima linha.",
+    "deId": 6,
+    "paraId": 5
 }
 ### Atualiza um recado
-PATCH {{baseUrl}}/recados/2/
+PATCH {{baseUrl}}/recados/6/
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
+
 {
-    "texto": "mikael",
-    "lido": true
+    "texto": "Este texto deve chegar no e-mail 7.",
+    "deId": 6,
+    "paraId": 6
+}
+### Apaga um recado
+DELETE {{baseUrl}}/recados/70/
+Authorization: Bearer {{authToken}}
+
+
+# 
+
+
+
+# Pessoas
+### Lista todas as pessoas
+GET {{baseUrl}}/pessoas/
+?limit=10
+&offset=0
+Authorization: Bearer {{authToken}}
+### Lista apenas uma pessoa
+GET {{baseUrl}}/pessoas/14/
+Authorization: Bearer {{authToken}}
+### Cria uma pessoa
+POST {{baseUrl}}/pessoas/
+Content-Type: application/json
+
+{
+    "email": "luiz@email.com",
+    "password": "123456",
+    "nome": "Luiz"
+}
+### Atualiza uma pessoa
+PATCH {{baseUrl}}/pessoas/37/
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "nome": "JOÃO"
+}
+### Apaga uma pessoa
+DELETE {{baseUrl}}/pessoas/37/
+Authorization: Bearer {{authToken}}
+
+
+
+# 
+
+
+
+# AUTH
+### Autenticação
+# @name authenticate
+POST {{baseUrl}}/auth/
+Content-Type: application/json
+
+{
+    "email": "luiz@email.com",
+    "password": "123456"
+}
+### Re-Autenticação
+# @name reAuthenticate
+POST {{baseUrl}}/auth/refresh/
+Content-Type: application/json
+
+{
+    "refreshToken": "{{refreshToken}}"
 }
 
-### Apaga um recado
-DELETE {{baseUrl}}/recados/2/
 
 
+# 
+
+
+
+# Upload
+### Foto da pessoa
+POST {{baseUrl}}/pessoas/upload-picture/
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----BoundaryDelimitadorHttp
+
+------BoundaryDelimitadorHttp
+Content-Disposition: form-data; name="file"; filename="man.png"
+Content-Type: image/png
+
+< ./dev/images/man.png
+------BoundaryDelimitadorHttp--
+### Ver foto
+GET {{baseUrl}}/pictures/39.jpg

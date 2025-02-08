@@ -10,16 +10,15 @@ export class PessoasService {
   constructor(
     @InjectRepository(Pessoa)
     private readonly pessoaRepository: Repository<Pessoa>,
-  ) { }
+  ) {}
 
   async create(createPessoaDto: CreatePessoaDto) {
-
     try {
       const dadosPessoa = {
         nome: createPessoaDto.nome,
         passwordHash: createPessoaDto.password,
         email: createPessoaDto.email,
-      }
+      };
 
       const novaPessoa = this.pessoaRepository.create(dadosPessoa);
       await this.pessoaRepository.save(novaPessoa);
@@ -31,29 +30,35 @@ export class PessoasService {
 
       throw error;
     }
-
-
   }
 
   async findAll() {
     const pessoas = await this.pessoaRepository.find({
       order: {
-        id: 'DESC'
-      }
+        id: 'DESC',
+      },
     });
 
     return pessoas;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pessoa`;
+  async findOne(id: number) {
+    const pessoa = await this.pessoaRepository.findOneBy({
+      id,
+    });
+
+    if (!pessoa) {
+      throw new NotFoundException('Pessoa não encontrada');
+    }
+
+    return pessoa;
   }
 
   async update(id: number, updatePessoaDto: UpdatePessoaDto) {
     const dadosPessoa = {
       nome: updatePessoaDto?.nome,
       passwordHash: updatePessoaDto?.password,
-    }
+    };
 
     const pessoa = await this.pessoaRepository.preload({
       id,

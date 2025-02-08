@@ -17,8 +17,6 @@ export class Recado {
   @Column({ type: 'varchar', length: 100 })
   texto: string;
 
-  
-
   @Column({ default: false })
   lido: boolean;
 
@@ -35,12 +33,11 @@ export class Recado {
   @ManyToOne(() => Pessoa)
   // Especifica a coluna que armazena a chave estrangeira
   @JoinColumn({ name: 'de' })
-  de: String;
+  de: Pessoa;
 
   // Muitos recados podem ser enviados por uma pessoa(destinataria)
   @ManyToOne(() => Pessoa)
   // Especifica a coluna que armazena a chave estrangeira
   @JoinColumn({ name: 'para' })
-  para: String;
-
+  para: Pessoa;
 }

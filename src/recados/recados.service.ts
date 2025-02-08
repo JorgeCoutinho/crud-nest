@@ -11,6 +11,7 @@ import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PessoasService } from 'src/pessoas/pessoas.service';
+import { text } from 'stream/consumers';
 
 @Injectable()
 export class RecadosService {
@@ -20,20 +21,35 @@ export class RecadosService {
     private readonly pessoasService: PessoasService,
   ) {}
 
-  private lastId = 1;
-  private recados: Recado[] = [
-    {
-      id: 1,
-      texto: 'Olá, tudo bem?',
-      de: 'Eu',
-      para: 'Você',
-      lido: false,
-      data: new Date(),
-    },
-  ];
+  // private lastId = 1;
+  // private recados: Recado[] = [
+  //   {
+  //     id: 1,
+  //     texto: 'Olá, tudo bem?',
+  //     de: 'Eu',
+  //     para: 'Você',
+  //     lido: false,
+  //     data: new Date(),
+  //   },
+  // ];
 
   async findAll() {
-    const recados = await this.recadoRepository.find();
+    const recados = await this.recadoRepository.find({
+      relations: ['de', 'para'],
+      order: {
+        id: 'DESC',
+      },
+      select: {
+        de: {
+          id: true,
+          nome: true,
+        },
+        para: {
+          id: true,
+          nome: true,
+        },
+      },
+    });
     return recados;
   }
 
@@ -42,6 +58,20 @@ export class RecadosService {
       where: {
         id,
       },
+      relations: ['de', 'para'],
+      order: {
+        id: 'DESC',
+      },
+      select: {
+        de: {
+          id: true,
+          nome: true,
+        },
+        para: {
+          id: true,
+          nome: true,
+        },
+      },
     });
 
     if (recado) return recado;
@@ -49,19 +79,31 @@ export class RecadosService {
     throw new NotFoundException('Recado não encontrado');
   }
 
-  async create(CreateRecadoDto: CreateRecadoDto) {
+  async create(createRecadoDto: CreateRecadoDto) {
+    const { deId, paraId } = createRecadoDto;
     // Encontrar a pessoa que está criando o recado
-    // Encontrar a pessoa para quem o recado esta sendo enviado
-
-
+    const de = await this.pessoasService.findOne(deId);
+    // Encontrar a pessoa para quem o recado está sendo enviado
+    const para = await this.pessoasService.findOne(paraId);
 
     const novoRecado = {
-      ...CreateRecadoDto,
+      texto: createRecadoDto.texto,
+      de,
+      para,
       lido: false,
       data: new Date(),
     };
-    const recado = await this.recadoRepository.create(novoRecado);
-    return this.recadoRepository.save(recado);
+
+    const recado = this.recadoRepository.create(novoRecado);
+    await this.recadoRepository.save(recado);
+
+    return {
+      ...recado,
+      de: {
+        id: recado.de.id,
+      },
+      para,
+    };
   }
 
   async update(id: number, UpdateRecadoDto: UpdateRecadoDto) {
