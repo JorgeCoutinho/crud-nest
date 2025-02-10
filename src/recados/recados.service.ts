@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Recado } from './entities/recado.entity';
 import { NotFoundError } from 'rxjs';
 import { CreateRecadoDto } from './dto/create-recado.dto';
@@ -109,7 +106,6 @@ export class RecadosService {
   }
 
   async update(id: number, UpdateRecadoDto: UpdateRecadoDto) {
-    
     const recado = await this.findOne(id);
 
     recado.texto = UpdateRecadoDto?.texto ?? recado.texto;

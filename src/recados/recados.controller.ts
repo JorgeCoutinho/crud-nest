@@ -36,7 +36,6 @@ export class RecadosController {
   @HttpCode(HttpStatus.OK)
   @Get()
   async findAll(@Query() paginationDto: PaginationDto) {
-    ;
     const recados = await this.recadosService.findAll(paginationDto);
     return recados;
   }
