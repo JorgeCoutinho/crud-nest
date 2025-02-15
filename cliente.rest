@@ -1,4 +1,4 @@
-@baseUrl = http://127.0.0.1:4000
+@baseUrl = http://127.0.0.1:3000
 @authToken = {{authenticate.response.body.accessToken}}
 @refreshToken = {{authenticate.response.body.refreshToken}}
 
@@ -13,11 +13,10 @@ GET {{baseUrl}}/recados/1/
 POST {{baseUrl}}/recados/
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
-
 {
     "texto": "mikael para luiz",
-    "deId": 5,
-    "paraId": 6
+    "deId": 4,
+    "paraId": 1
 }
 ### Atualiza um recado
 PATCH {{baseUrl}}/recados/23/
@@ -51,7 +50,7 @@ POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-    "email": "luiz@email.com",
+    "email": "teste@email.com",
     "password": "123456",
     "nome": "Luiz"
 }
