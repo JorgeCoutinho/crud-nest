@@ -32,7 +32,6 @@ import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 // DTO -> Objeto simples -> Validar dados / Transformar dados
 
 @Controller('recados')
-@UsePipes(ParseIntIdPipe)
 export class RecadosController {
   constructor(private recadosService: RecadosService) {}
 
